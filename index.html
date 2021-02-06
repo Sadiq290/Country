@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Tour</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="Globe.jpg" type="image/x-icon">
+</head>
+
+<body>
+    <section id ="section_details">
+
+    </section>
+    <section id="section" style="display: grid ;">
+
+    </section>
+    <script>
+        fetch("https://restcountries.eu/rest/v2/all")
+            .then(res => res.json())
+            .then(data => {
+                for (let index = 0; index < data.length; index++) {
+
+                    const element = data[index].name;
+                    const item = data[index].capital;
+
+                    const section = document.getElementById('section');
+                    const div = document.createElement('div');
+
+                    const country_info = `
+                    <h1>${element}</h1>
+                    <h2>${item}</h2>
+                    <button onclick="country_detail('${element}')">Details</button>
+                    `
+                    div.className = "country";
+                    div.innerHTML = country_info;
+
+                    section.appendChild(div);
+                    
+                }
+            })
+        const country_detail = name => {
+            fetch(`https://restcountries.eu/rest/v2/name/${name}`)
+            .then(res => res.json())
+            .then(data => country(data[0]))
+        }
+        function country(data){
+            const country_div = document.getElementById('section_details');
+            country_div.innerHTML = `
+            <h2>${data.name}</h2>
+            <h3>${data.capital}</h2>
+            <img src = ${data.flag}>
+            <h5>${"Population: "}${data.population}</h5>
+            <h5>${"Area: "}${data.area}</h5>
+            `
+            // country_div.appendChild(country_div);
+        }
+    </script>
+</body>
+
+</html>
